@@ -9,6 +9,8 @@ client = OAuth2Client(
     device_authorization_endpoint="https://id.elite12.de/realms/elite12/protocol/openid-connect/auth/device"
 )
 
+cache = os.path.join(os.path.dirname(__file__), ".cache")
+
 
 def getTokenWithRefreshToken(refresh_token):
     return client.refresh_token(refresh_token)
@@ -26,7 +28,7 @@ def getTokenWithAuthorization():
         resp = pool_job()
     assert isinstance(resp, BearerToken)
 
-    with open("cache", "w") as file:
+    with open(os.path.join(os.path.dirname(__file__), ".cache"), "w") as file:
         file.write(resp.refresh_token)
     file.close()
 
@@ -35,8 +37,8 @@ def getTokenWithAuthorization():
 
 def get_authorization():
     token = ""
-    if os.path.isfile("cache"):
-        refresh_token = open("cache", "r").readline().strip()
+    if os.path.isfile(cache):
+        refresh_token = open(cache, "r").readline().strip()
         if refresh_token:
             token = getTokenWithRefreshToken(refresh_token)
 
