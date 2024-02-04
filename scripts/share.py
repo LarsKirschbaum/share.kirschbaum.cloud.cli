@@ -6,7 +6,7 @@ import sys
 import mimetypes
 import math
 import os
-import auth
+from sharelib import auth
 from datetime import datetime, timedelta
 
 def callApiWithKey(url, data):
@@ -83,8 +83,10 @@ def main():
 
         print("Calling Upload Complete... ")
         completeResponse = session.post("https://api.share.kirschbaum.cloud/completeUpload/" + test.shareId, headers={"Content-Type": "application/json"}, data=test3)
-        print(str(completeResponse.status_code) + completeResponse.text)
-        print("https://share.kirschbaum.cloud/d/" + test.shareId)
+        if completeResponse.status_code != 201:
+            print(str(completeResponse.status_code) + completeResponse.text)
+        else:
+            print("https://share.kirschbaum.cloud/d/" + test.shareId)
 
     else:
         print(str(response.status_code) + response.text)
