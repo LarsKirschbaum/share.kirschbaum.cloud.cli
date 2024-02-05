@@ -68,6 +68,8 @@ def main():
     filePath = sys.argv[1]
 
     mimetype = mimetypes.guess_type(filePath)[0]
+    if mimetype == "":
+        mimetype = "application/octet-stream"
     file = File(filePath, os.stat(filePath).st_size, mimetype)
 
     requestBody = toJSON(AddShareRequestDTO(filePath, RequestTypes.file, file, False))
